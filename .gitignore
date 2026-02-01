@@ -1,0 +1,5 @@
+.env
+logs/
+plugins/
+tmp/
+config/
