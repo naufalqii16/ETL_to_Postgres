@@ -43,4 +43,4 @@ for idx, row in sampled_events.iterrows():
 
 # Save
 df_logs = pd.DataFrame(data_logs).sort_values("exposure_time")
-df_logs.to_csv("data/campaign_logs.csv", index=False)
+df_logs.to_csv("../data/campaign_logs.csv", index=False)

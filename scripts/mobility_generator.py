@@ -55,4 +55,4 @@ for i in range(1, n_rows + 1):
 
 # Save
 df_events = pd.DataFrame(data).sort_values("timestamp")
-df_events.to_csv("data/mobility.csv", index=False)
+df_events.to_csv("../data/mobility.csv", index=False)

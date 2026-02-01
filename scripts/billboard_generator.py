@@ -45,4 +45,4 @@ for i in range(1, n_rows + 1):
     })
 
 df = pd.DataFrame(data)
-print(df.to_csv('data/billboard.csv', index=False))
+df.to_csv('../data/billboard.csv', index=False)
