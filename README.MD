@@ -14,7 +14,7 @@ Airflow ETL pipeline yang ngambil data dari CSV lokal, lalu nge-load hasilnya ke
 │   ├── mobility.csv
 │   ├── campaign_logs.csv
 │   └── billboard.csv
-├── scripts
+├── scripts/
 |   ├── billboard_generator.py
 |   ├── campaign_logs_generator.py
 |   ├── mobility_generator.py
