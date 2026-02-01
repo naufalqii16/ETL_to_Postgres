@@ -1,5 +1,6 @@
 .env
 logs/
 plugins/
-tmp/
 config/
+tmp/*
+!tmp/.gitkeep

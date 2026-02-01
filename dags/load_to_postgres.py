@@ -85,7 +85,7 @@ def load_to_postgres():
     df.to_sql(
         name="monthly_reach",
         con=engine,
-        if_exists="replace",   # bisa diganti append
+        if_exists="replace",
         index=False
     )
 
