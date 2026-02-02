@@ -1,6 +1,6 @@
 # ETL Monthly Reach to PostgreSQL
 
-Airflow ETL pipeline yang ngambil data dari CSV lokal, lalu nge-load hasilnya ke PostgreSQL.
+Airflow ETL pipeline yang melakukan data extraction dari CSV lokal, transformation, dan terakhir load hasilnya ke PostgreSQL.
 
 ## Struktur Folder
 
@@ -20,6 +20,8 @@ Airflow ETL pipeline yang ngambil data dari CSV lokal, lalu nge-load hasilnya ke
 |   ├── mobility_generator.py
 ├── tmp/
 │   └── .gitkeep
+├── answers_sql_analytics.sql ==> jawaban + penjelasan logic dari soal-soal sql (Soal No. 1)
+├── Design data warehouse schema.pdf ==> jawaban untuk soal nomor 2 (Data Modelling)
 ├── docker-compose.yml
 ├── .env.example
 └── README.md
@@ -43,25 +45,25 @@ Edit `.env` atau tetap menggunakan default dari .env.example.
 docker-compose up -d
 ```
 
-Tunggu sampai semua container `healthy`. Bisa cek status-nya:
+Tunggu sampai semua container `healthy`. Bisa cek status-nya melalui:
 
 ```bash
 docker-compose ps
 ```
 
-Pastiin postgres, redis, dan semua airflow services statusnya `healthy` atau `running`.
+Setelah semua airflow services statusnya `healthy` atau `running`, proses ETL dapat dijalankan.
 
 ---
 
 ### 3. Verifikasi Raw Data di PostgreSQL
 
-Sebelum menjalankan DAG, cek dulu bahwa init script sudah berhasil bikin tabel dan load data-nya:
+Sebelum menjalankan DAG, dapat dilakukan pengecekan terlebih dahulu terkait tabel-tabel yang sudah ada di PostgreSQL Dockernya:
 
 ```bash
 docker exec -it etl_to_postgres-postgres-1 psql -U airflow -d airflow
 ```
 
-Di dalam psql, jalanin query berikut untuk cek raw data:
+Di dalam psql, jalankan query berikut untuk cek raw data:
 
 ```sql
 -- Cek tabel billboard
@@ -78,7 +80,7 @@ SELECT * FROM monthly_reach;
 -- Harapannya: ERROR relation "monthly_reach" does not exist
 ```
 
-Kalau semua raw table ada dan `monthly_reach` belum ada
+Pastikan semua raw table sudah ada dan `monthly_reach` belum ada.
 
 ---
 ### 4. Jalankan Query SQL yang merupakan jawaban dari pertanyaan di soal sql
@@ -98,23 +100,23 @@ Login dengan:
 - **Username**: `airflow`
 - **Password**: `airflow`
 
-Cari DAG **`load_monthly_reach_to_postgres`**, toggle ON kalau masih pause, lalu trigger manually atau tunggu schedule-nya jalan.
+Cari DAG **`load_monthly_reach_to_postgres`**, dapat dilakukan trigger manually agar lebih cepat.
 
-Pastiin semua 4 task (`extract_all` → `clean_all` → `compute_monthly_reach` → `load_to_postgres`) statusnya **green (success)**.
+Pastikan semua 4 task (`extract_all` → `clean_all` → `compute_monthly_reach` → `load_to_postgres`) statusnya **success**.
 
 ---
 
 ### 6. Verifikasi Hasil di PostgreSQL
 
-Setelah DAG sukses, masuk lagi ke psql:
+Setelah DAG sukses, dapat masuk kembali ke psql:
 
 ```bash
 docker exec -it etl_to_postgres-postgres-1 psql -U airflow -d airflow
 ```
 
-Cek tabel `monthly_reach` yang baru terbentuk:
+Cek tabel `monthly_reach` yang baru di-load ke PostgreSQL:
 
 ```sql
 SELECT * FROM monthly_reach LIMIT 10;
 ```
-Jika tabel **`monthly_reach`** dapat diquery, berarti proses ETL telah berhasil.
+Jika tabel **`monthly_reach`** sudah dapat diquery, berarti proses ETL telah berhasil.
